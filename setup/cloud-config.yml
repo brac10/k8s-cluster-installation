@@ -1,17 +1,15 @@
 #cloud-config
 
 ## Set your hostname here, the manage_etc_hosts will update the hosts file entries as well
-hostname: k8s-master-01
+hostname: k8s-master-vip
 manage_etc_hosts: true
 
 ## Set the locale of the system
-locale: 'en_AU.UTF-8'
-#locale: 'en_US.UTF-8'
+locale: "en_US.UTF-8"
 
 ## Set the timezone
 ## Value of 'timezone' must exist in /usr/share/zoneinfo
-timezone: 'Australia/Melbourne'
-#timezone: 'America/New_York'
+timezone: "America/Chicago"
 
 apt_preserve_sources_list: true
 apt_update: true
@@ -26,17 +24,17 @@ users:
     ssh_import_id: None
     ## To enable SSH password log in
     ## mkpasswd --method=SHA-512 --rounds=4096
-    # passwd: ""
+    passwd: "Ranger1975#"
     # lock_passwd: false
     # ssh_pwauth: true
     lock_passwd: true
     ssh_pwauth: false
     ssh_authorized_keys:
-      - 'ssh-rsa '
+      - "ssh-rsa "
 
 write_files:
   - path: /etc/netplan/50-cloud-init.yaml
-    permissions: '0644'
+    permissions: "0644"
     content: |
       network:
         version: 2
@@ -44,11 +42,11 @@ write_files:
           eth0:
             dhcp4: no
             addresses:
-              - 192.168.1.121/24
+              - 192.168.1.150/24
             gateway4: 192.168.1.1
             nameservers:
               addresses:
-                - 1.1.1.1
+                - 192.168.1.169
                 - 8.8.8.8
     ## To enable WiFi network connection
     ## Note: IP allocation is dynamic and won't match the defined state as in eth0.
@@ -59,8 +57,8 @@ write_files:
     #         optional: true
     #         dhcp4: true
     #         access-points:
-    #           'YOUR-SSID-NAME':
-    #             password: 'YOUR-NETWORK-PASSWORD'
+    #           'bracom':
+    #             password: 'Scott1957'
 
 runcmd:
   - [sudo, netplan, apply]
@@ -68,7 +66,7 @@ runcmd:
       sudo,
       sed,
       -i,
-      's/PasswordAuthentication no/PasswordAuthentication yes/g',
+      "s/PasswordAuthentication no/PasswordAuthentication no/g",
       /etc/ssh/sshd_config,
     ]
   - [sudo, systemctl, restart, sshd]
